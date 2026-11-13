@@ -163,6 +163,24 @@
     if (cap.hint) cap.hint.textContent = "Swipe to see all five books.";
   });
 
+  // Hero card: cuts from one cover or artwork to the next. Still for visitors who ask for less motion.
+  document.querySelectorAll("[data-flip]").forEach(function (card) {
+    var srcs = JSON.parse(card.getAttribute("data-flip"));
+    var frames = [card.querySelector("img")], at = 0, timer = null;
+    if (window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    srcs.slice(1).forEach(function (src) {
+      var im = new Image(); im.alt = ""; im.decoding = "async"; im.src = src;
+      card.appendChild(im); frames.push(im);
+    });
+    var step = function () {
+      var next = (at + 1) % frames.length;
+      if (!frames[next].complete || !frames[next].naturalWidth) return;   // wait for the next picture rather than flash an empty card
+      frames[at].classList.remove("on"); frames[next].classList.add("on"); at = next;
+    };
+    var run = function (on) { clearInterval(timer); timer = on ? setInterval(step, 800) : null; };
+    if ("IntersectionObserver" in window) new IntersectionObserver(function (e) { run(e[0].isIntersecting); }).observe(card); else run(true);
+  });
+
   // Sale countdown to a real end time. Says nothing once the sale is over.
   document.querySelectorAll("[data-countdown]").forEach(function (el) {
     var end = new Date(el.getAttribute("data-countdown")).getTime();
