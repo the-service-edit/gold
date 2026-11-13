@@ -126,22 +126,35 @@ section{padding-block:40px}
 .revs p{margin:6px 0 8px;max-width:42em}
 .revs .who{font-size:13.5px;font-weight:700;color:var(--soft)}
 
-/* the five single books as one overlapping row; the chosen book sits largest in the middle */
-.fan{--cw:clamp(128px,36vw,250px);overflow:hidden;padding:6px 0 0}
+/* The Collection: five covers in one overlapping row, the active book largest.
+   Mouse: hovering a cover enlarges it in place. Touch: the row scrolls sideways and the middle cover is the active one. */
+.fan{--cw:clamp(112px,30vw,250px);--sp:.56;overflow:hidden;padding:6px 0 0}
 .fan-row{position:relative;height:calc(var(--cw)*1.545);margin:0 auto}
-.fan-row li{position:absolute;left:50%;top:0;width:var(--cw);margin-left:calc(var(--cw)/-2);transition:transform .38s cubic-bezier(.3,.7,.2,1);transform:translateX(calc(var(--x)*var(--cw))) scale(var(--s))}
+.fan-row li{position:absolute;left:50%;top:0;width:var(--cw);margin-left:calc(var(--cw)/-2);z-index:calc(10 - var(--d));
+  transition:transform .28s cubic-bezier(.3,.7,.2,1);transform:translateX(calc(var(--p)*var(--sp)*var(--cw))) scale(var(--s))}
 .fan-row a{display:block;box-shadow:0 10px 24px -8px rgba(59,49,43,.55)}
 .fan-row img{width:100%;aspect-ratio:.647;object-fit:cover}
-.fan-row li[data-o="0"]{--x:0;--s:1;z-index:3}
-.fan-row li[data-o="-1"]{--x:-.6;--s:.84;z-index:2}
-.fan-row li[data-o="1"]{--x:.6;--s:.84;z-index:2}
-.fan-row li[data-o="-2"]{--x:-1.03;--s:.7;z-index:1}
-.fan-row li[data-o="2"]{--x:1.03;--s:.7;z-index:1}
-.fan-cap{text-align:center;padding:26px var(--gut) 0;display:grid;justify-items:center;gap:6px}
+.fan-row li[data-o="0"]{--p:0;--d:0;--s:1}
+.fan-row li[data-o="-1"]{--p:-1;--d:1;--s:.86}
+.fan-row li[data-o="1"]{--p:1;--d:1;--s:.86}
+.fan-row li[data-o="-2"]{--p:-2;--d:2;--s:.74}
+.fan-row li[data-o="2"]{--p:2;--d:2;--s:.74}
+.fan-cap{text-align:center;padding:22px var(--gut) 0;display:grid;justify-items:center;gap:6px}
 .fan-cap h3{font:700 1.25rem/1.25 var(--sans)}
 .fan-cap .p{color:var(--soft)}
 .fan-cap .btn{margin-top:12px;max-width:320px}
 .fan-hint{margin-top:6px}
+.fan-dots{display:none;justify-content:center;gap:9px;padding-top:4px}
+.fan-dots li{width:7px;height:7px;border-radius:50%;background:var(--line);transition:background .2s,transform .2s}
+.fan-dots li.on{background:var(--gold);transform:scale(1.35)}
+/* touch: a sideways scroller, one book per swipe */
+.fan--scroll{--cw:clamp(150px,47vw,270px);--slot:calc(var(--cw)*.56)}
+.fan--scroll .fan-row{display:flex;height:auto;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;scrollbar-width:none;padding:8px 0 30px}
+.fan--scroll .fan-row::-webkit-scrollbar{display:none}
+.fan--scroll .fan-row li{position:relative;left:auto;top:auto;margin:0;flex:0 0 var(--slot);width:var(--slot);height:calc(var(--cw)*1.545);scroll-snap-align:center;scroll-snap-stop:always;transition:none;transform:none}
+.fan--scroll .fan-row a{position:absolute;left:50%;top:0;width:var(--cw);margin-left:calc(var(--cw)/-2);transform:translateX(var(--tx,0px)) scale(var(--s,1));will-change:transform}
+.fan--scroll .fan-dots{display:flex}
+.fan--scroll .fan-cap{padding-top:14px}
 
 /* footer, kept from "Made one at a time" onwards */
 .foot{background:var(--char);color:var(--cream);padding:52px var(--gut) 104px;margin-top:24px}
@@ -188,11 +201,8 @@ section{padding-block:40px}
   .foot .fine{grid-column:1/-1}
 }
 @media (min-width:900px){
-  .fan{--cw:300px}
-  .fan-row li[data-o="-1"]{--x:-.74;--s:.86}
-  .fan-row li[data-o="1"]{--x:.74;--s:.86}
-  .fan-row li[data-o="-2"]{--x:-1.34;--s:.72}
-  .fan-row li[data-o="2"]{--x:1.34;--s:.72}
+  .fan{--cw:min(300px,26vw);--sp:.66}
+  .fan--scroll{--cw:270px}
   .fan-cap h3{font-size:1.4rem}
 }
 @media (min-width:1100px){
