@@ -177,7 +177,7 @@
       if (!frames[next].complete || !frames[next].naturalWidth) return;   // wait for the next picture rather than flash an empty card
       frames[at].classList.remove("on"); frames[next].classList.add("on"); at = next;
     };
-    var run = function (on) { clearInterval(timer); timer = on ? setInterval(step, 800) : null; };
+    var run = function (on) { clearInterval(timer); timer = on ? setInterval(step, 350) : null; };
     if ("IntersectionObserver" in window) new IntersectionObserver(function (e) { run(e[0].isIntersecting); }).observe(card); else run(true);
   });
 

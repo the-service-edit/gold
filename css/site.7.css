@@ -12,7 +12,7 @@
   --panel:#FFFDFA;
   --serif:"Cinzel Decorative","Trajan Pro",Georgia,serif;
   --sans:"Lato","Helvetica Neue",Arial,sans-serif;
-  --poster:"Cinzel","Trajan Pro",Georgia,serif;
+  --poster:"Gloock","Didot","Bodoni 72",Georgia,serif;
   --gut:20px;--max:1200px;
   color-scheme:light;
 }
@@ -163,10 +163,10 @@ section{padding-block:40px}
 .btn s{font-weight:400;opacity:.72;font-size:.84em;margin-right:.3em}
 .price s{font-weight:400;color:var(--soft);font-size:.8em;margin-right:4px}
 .tag-sale{display:inline-block;background:var(--terra);color:var(--char);font:700 12px/1 var(--sans);letter-spacing:.08em;text-transform:uppercase;padding:6px 9px;border-radius:2px}
-.bf{--fs:clamp(4.6rem,min(24.5vw,19vh),15.5rem);--off:clamp(3.1rem,min(15.5vw,10vh),6.6rem);position:relative;text-align:center;padding:10px var(--gut) 30px;overflow:hidden}
-.bf-word{display:grid;font:400 var(--fs)/.84 var(--poster);letter-spacing:-.015em;text-transform:uppercase;color:var(--char);font-kerning:normal}
+.bf{--fs:clamp(4.6rem,min(26vw,19vh),15.5rem);--off:clamp(3.1rem,min(15.5vw,10vh),6.6rem);position:relative;text-align:center;padding:10px var(--gut) 30px;overflow:hidden}
+.bf-word{display:grid;font:400 var(--fs)/.86 var(--poster);letter-spacing:-.02em;text-transform:uppercase;color:var(--char);font-kerning:normal}
 /* one card in front of the lettering, cutting from cover to artwork to cover, as on a flip-through */
-.bf-card{position:relative;z-index:1;width:min(47vw,30vh,300px);aspect-ratio:2/3;margin:calc(var(--fs)*-.36) auto calc(var(--off)*-.28);background:var(--char);box-shadow:0 22px 44px -20px rgba(59,49,43,.7)}
+.bf-card{position:relative;z-index:1;width:min(52vw,24vh,300px);aspect-ratio:.647;margin:calc(var(--fs)*-.4) auto 14px;background:var(--char);outline:5px solid #fff;box-shadow:0 26px 50px -18px rgba(59,49,43,.75)}
 .bf-card img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0}
 .bf-card img.on{opacity:1}
 .bf-off{position:relative;font:300 var(--off)/1 var(--sans);letter-spacing:-.035em;text-transform:uppercase}
@@ -231,8 +231,8 @@ section{padding-block:40px}
 
 @media (min-width:900px){
   :root{--gut:40px}
-  .bf{--fs:clamp(4.6rem,min(24.5vw,17vh),15.5rem);--off:clamp(3.1rem,9vh,6.6rem)}
-  .bf-card{width:min(27vh,300px)}
+  .bf{--fs:clamp(4.6rem,min(26vw,17vh),15.5rem);--off:clamp(3.1rem,9vh,6.6rem)}
+  .bf-card{width:min(24vh,300px);outline-width:6px}
   .bf{padding-bottom:64px}
   .bf-what{font-size:13.5px;letter-spacing:.2em}
   .bf-cta{grid-template-columns:1fr 1fr;max-width:780px}
