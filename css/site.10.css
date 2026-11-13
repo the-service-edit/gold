@@ -166,7 +166,9 @@ section{padding-block:40px}
 .bf{--fs:clamp(4.6rem,min(26vw,19vh),15.5rem);--off:clamp(3.1rem,min(15.5vw,10vh),6.6rem);position:relative;text-align:center;padding:10px var(--gut) 30px;overflow:hidden}
 .bf-word{display:grid;font:400 var(--fs)/.86 var(--poster);letter-spacing:-.02em;text-transform:uppercase;color:var(--char);font-kerning:normal}
 /* the lettering stands still; covers stream across in front of it, following the mouse (or a set path on touch) */
-.bf-stage{position:relative;display:grid;place-items:center;padding-block:clamp(34px,7vh,70px) 6px}
+.bf-love{position:relative;z-index:3;padding-top:clamp(10px,2.4vh,26px);font:700 11.5px/1.5 var(--sans);letter-spacing:.16em;text-transform:uppercase}
+.bf-love .stars{display:block;font-size:14px;letter-spacing:3px;margin-bottom:2px}
+.bf-stage{position:relative;display:grid;place-items:center;padding-block:clamp(14px,3vh,34px) 6px}
 .bf-stage .bf-word{position:relative;z-index:1;pointer-events:none;user-select:none}
 .bf-drop{position:absolute;left:0;top:0;z-index:2;width:clamp(104px,29vw,190px);aspect-ratio:.647;object-fit:cover;pointer-events:none;will-change:transform,opacity;box-shadow:0 18px 34px -14px rgba(59,49,43,.7)}
 /* without scripts, or for visitors who ask for less motion: the five covers stand in a still row */
@@ -239,7 +241,9 @@ section{padding-block:40px}
 @media (min-width:900px){
   :root{--gut:40px}
   .bf{--fs:clamp(4.6rem,min(26vw,17vh),15.5rem);--off:clamp(3.1rem,9vh,6.6rem)}
-  .bf-stage{padding-block:clamp(40px,8vh,84px) 4px}
+  .bf-stage{padding-block:clamp(16px,3.4vh,40px) 4px}
+  .bf-love{font-size:12.5px;letter-spacing:.2em}
+  .bf-love .stars{display:inline;margin:0 .6em 0 0}
   .bf-drop{width:clamp(130px,12vw,190px)}
   .bf{padding-bottom:64px}
   .bf-what{font-size:13.5px;letter-spacing:.2em}
