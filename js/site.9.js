@@ -172,7 +172,7 @@
     if (window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     srcs.forEach(function (s) { var im = new Image(); im.src = s; });   // warm the cache
     stage.classList.add("is-live");
-    var n = 0, last = null, lastMove = 0, t = 0.6, timer = null;
+    var n = 0, last = null, lastMove = 0, t = 0.6, timer = null, word = stage.querySelector(".bf-word") || stage;
     var drop = function (x, y) {
       var img = document.createElement("img");
       img.className = "bf-drop"; img.alt = ""; img.src = srcs[n++ % srcs.length];
@@ -189,9 +189,9 @@
     };
     var auto = function () {                                   // a slow figure-of-eight around the lettering
       if (Date.now() - lastMove < 1800) return;
-      var w = stage.clientWidth, h = stage.clientHeight;
-      t += 0.5;
-      drop(w / 2 + Math.sin(t) * w * 0.33, h / 2 + Math.sin(t * 2 + 0.6) * h * 0.24);
+      var s = stage.getBoundingClientRect(), wr = word.getBoundingClientRect();
+      t += 0.5;                                               // the path stays over the lettering, so the offer line and buttons are never covered unasked
+      drop(s.width / 2 + Math.sin(t) * s.width * 0.33, wr.top - s.top + wr.height * 0.46 + Math.sin(t * 2 + 0.6) * wr.height * 0.32);
     };
     var run = function (on) { clearInterval(timer); timer = on ? setInterval(auto, 240) : null; };
     if ("IntersectionObserver" in window) new IntersectionObserver(function (e) { run(e[0].isIntersecting); }).observe(stage); else run(true);
