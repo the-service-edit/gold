@@ -163,22 +163,47 @@
     if (cap.hint) cap.hint.textContent = "Swipe to see all five books.";
   });
 
-  // Hero card: cuts from one cover or artwork to the next. Still for visitors who ask for less motion.
-  document.querySelectorAll("[data-flip]").forEach(function (card) {
-    var srcs = JSON.parse(card.getAttribute("data-flip"));
-    var frames = [card.querySelector("img")], at = 0, timer = null;
+  // Hero: covers stream across in front of the lettering. With a mouse they follow the pointer;
+  // on touch screens, and whenever the mouse is idle, they follow a looping path. Each cover
+  // fades in, holds, then fades out and is removed. Visitors who ask for less motion get a still row.
+  document.querySelectorAll("[data-trail]").forEach(function (stage) {
+    var srcs = JSON.parse(stage.getAttribute("data-trail"));
+    if (!srcs.length || !stage.animate) return;
     if (window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    srcs.slice(1).forEach(function (src) {
-      var im = new Image(); im.alt = ""; im.decoding = "async"; im.src = src;
-      card.appendChild(im); frames.push(im);
-    });
-    var step = function () {
-      var next = (at + 1) % frames.length;
-      if (!frames[next].complete || !frames[next].naturalWidth) return;   // wait for the next picture rather than flash an empty card
-      frames[at].classList.remove("on"); frames[next].classList.add("on"); at = next;
+    srcs.forEach(function (s) { var im = new Image(); im.src = s; });   // warm the cache
+    stage.classList.add("is-live");
+    var n = 0, last = null, lastMove = 0, t = 0.6, timer = null;
+    var drop = function (x, y) {
+      var img = document.createElement("img");
+      img.className = "bf-drop"; img.alt = ""; img.src = srcs[n++ % srcs.length];
+      img.style.left = x + "px"; img.style.top = y + "px";
+      stage.appendChild(img);
+      var base = "translate(-50%,-50%) rotate(" + ((Math.random() - 0.5) * 14).toFixed(1) + "deg)";
+      var a = img.animate([
+        { transform: base + " scale(.65)", opacity: 0 },
+        { transform: base + " scale(1)", opacity: 1, offset: 0.16 },
+        { transform: base + " scale(1)", opacity: 1, offset: 0.62 },
+        { transform: base + " translateY(-16px) scale(.9)", opacity: 0 }
+      ], { duration: 1250, easing: "cubic-bezier(.2,.8,.2,1)" });
+      a.onfinish = function () { img.remove(); };
     };
-    var run = function (on) { clearInterval(timer); timer = on ? setInterval(step, 350) : null; };
-    if ("IntersectionObserver" in window) new IntersectionObserver(function (e) { run(e[0].isIntersecting); }).observe(card); else run(true);
+    var auto = function () {                                   // a slow figure-of-eight around the lettering
+      if (Date.now() - lastMove < 1800) return;
+      var w = stage.clientWidth, h = stage.clientHeight;
+      t += 0.5;
+      drop(w / 2 + Math.sin(t) * w * 0.33, h / 2 + Math.sin(t * 2 + 0.6) * h * 0.24);
+    };
+    var run = function (on) { clearInterval(timer); timer = on ? setInterval(auto, 240) : null; };
+    if ("IntersectionObserver" in window) new IntersectionObserver(function (e) { run(e[0].isIntersecting); }).observe(stage); else run(true);
+    if (window.matchMedia && window.matchMedia("(hover: hover) and (pointer: fine)").matches) {
+      stage.addEventListener("pointermove", function (e) {
+        var r = stage.getBoundingClientRect(), x = e.clientX - r.left, y = e.clientY - r.top;
+        lastMove = Date.now();
+        if (last && Math.hypot(x - last.x, y - last.y) < 105) return;
+        last = { x: x, y: y }; drop(x, y);
+      });
+      stage.addEventListener("pointerleave", function () { last = null; });
+    }
   });
 
   // Sale countdown to a real end time. Says nothing once the sale is over.

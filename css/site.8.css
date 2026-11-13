@@ -165,11 +165,17 @@ section{padding-block:40px}
 .tag-sale{display:inline-block;background:var(--terra);color:var(--char);font:700 12px/1 var(--sans);letter-spacing:.08em;text-transform:uppercase;padding:6px 9px;border-radius:2px}
 .bf{--fs:clamp(4.6rem,min(26vw,19vh),15.5rem);--off:clamp(3.1rem,min(15.5vw,10vh),6.6rem);position:relative;text-align:center;padding:10px var(--gut) 30px;overflow:hidden}
 .bf-word{display:grid;font:400 var(--fs)/.86 var(--poster);letter-spacing:-.02em;text-transform:uppercase;color:var(--char);font-kerning:normal}
-/* one card in front of the lettering, cutting from cover to artwork to cover, as on a flip-through */
-.bf-card{position:relative;z-index:1;width:min(52vw,24vh,300px);aspect-ratio:.647;margin:calc(var(--fs)*-.4) auto 14px;background:var(--char);outline:5px solid #fff;box-shadow:0 26px 50px -18px rgba(59,49,43,.75)}
-.bf-card img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0}
-.bf-card img.on{opacity:1}
-.bf-off{position:relative;font:300 var(--off)/1 var(--sans);letter-spacing:-.035em;text-transform:uppercase}
+/* the lettering stands still; covers stream across in front of it, following the mouse (or a set path on touch) */
+.bf-stage{position:relative;display:grid;place-items:center;align-content:center;height:clamp(300px,46vh,560px);margin-inline:calc(var(--gut)*-1);overflow:hidden}
+.bf-stage .bf-word{position:relative;z-index:1;pointer-events:none;user-select:none}
+.bf-drop{position:absolute;left:0;top:0;z-index:2;width:clamp(104px,29vw,190px);aspect-ratio:.647;object-fit:cover;pointer-events:none;will-change:transform,opacity;box-shadow:0 18px 34px -14px rgba(59,49,43,.7)}
+/* without scripts, or for visitors who ask for less motion: the five covers stand in a still row */
+.bf-still{position:relative;z-index:2;display:flex;justify-content:center;margin-top:calc(var(--fs)*-.3)}
+.bf-still li{width:clamp(56px,17vw,120px);margin-inline:-1.2vw;box-shadow:0 12px 24px -10px rgba(59,49,43,.7)}
+.bf-still li:nth-child(odd){transform:rotate(-4deg)}
+.bf-still li:nth-child(even){transform:rotate(3deg) translateY(6px)}
+.bf-stage.is-live .bf-still{display:none}
+.bf-off{position:relative;font:300 var(--off)/1 var(--sans);letter-spacing:-.035em;text-transform:uppercase;margin-top:4px}
 .bf-off b{font-weight:900}
 .bf-what{font:700 12px/1.5 var(--sans);letter-spacing:.13em;text-transform:uppercase;margin-top:12px}
 .bf-what span{white-space:nowrap}
@@ -232,7 +238,8 @@ section{padding-block:40px}
 @media (min-width:900px){
   :root{--gut:40px}
   .bf{--fs:clamp(4.6rem,min(26vw,17vh),15.5rem);--off:clamp(3.1rem,9vh,6.6rem)}
-  .bf-card{width:min(24vh,300px);outline-width:6px}
+  .bf-stage{height:clamp(380px,54vh,620px)}
+  .bf-drop{width:clamp(130px,12vw,190px)}
   .bf{padding-bottom:64px}
   .bf-what{font-size:13.5px;letter-spacing:.2em}
   .bf-cta{grid-template-columns:1fr 1fr;max-width:780px}
