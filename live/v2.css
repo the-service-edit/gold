@@ -36,6 +36,12 @@ html.gfb2 .g2-setcard .gfb-card__media img{object-fit:contain;background:#F9F5F0
 html.gfb2 .g2-artsec .gfb-card__media,html.gfb2 .g2-artcard .gfb-card__media{aspect-ratio:3/4;background:#F1EAE1;display:block}
 html.gfb2 .g2-artsec .gfb-card__media img,html.gfb2 .g2-artcard .gfb-card__media img{width:100%;height:100%;object-fit:contain}
 
+/* ---------- artwork pack: Squarespace's own product page, tidied ---------- */
+html.gfb2 .g2-packarts .gfb-grid{grid-template-columns:repeat(2,1fr)}
+@media (min-width:40rem){html.gfb2 .g2-packarts .gfb-grid{grid-template-columns:repeat(4,1fr)}}
+@media (min-width:62rem){html.gfb2 .g2-packarts .gfb-grid{grid-template-columns:repeat(5,1fr)}}
+.g2.g2-packoffer .offer{padding-block:34px}
+
 /* ---- preview stylesheet, scoped to .g2 ---- */
 .g2{
   --cream:#F9F5F0;   
