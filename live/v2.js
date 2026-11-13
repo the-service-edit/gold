@@ -131,6 +131,16 @@
 
   // Set page during the sale: show the usual price struck through beside the sale price, and keep the
   // sticky bar on the same figure as the page (the old bar had the full price written into it).
+  // Rebinds and Artwork listings: the set card is static text, so show the sale price while the sale runs.
+  function listingSale() {
+    if (!onSale) return;
+    [].forEach.call(d.querySelectorAll('.gfb-native-part[data-gfb-native="store"] a.gfb-card[href$="/rebinds/p/acotar-book-set"] .gfb-card__price'), function (p) {
+      if (p.getAttribute("data-g2-sale")) return;
+      p.setAttribute("data-g2-sale", "1");
+      p.innerHTML = "From $350 <s>$500</s>";
+    });
+  }
+
   function setSale() {
     if (!onSale || !/\/rebinds\/p\/acotar-book-set$/.test(location.pathname.replace(/\/$/, ""))) return;
     var WAS = { "350": "500", "420": "600", "490": "700", "560": "800" };
@@ -402,6 +412,7 @@
     try { product(); } catch (e) {}
     try { pack(); } catch (e) {}
     try { setSale(); } catch (e) {}
+    try { listingSale(); } catch (e) {}
     try { artworkListing(); } catch (e) {}
   });
 })();
