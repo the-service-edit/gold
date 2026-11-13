@@ -129,6 +129,38 @@
     if (first && first.parentNode) first.parentNode.insertBefore(box, first);
   }
 
+  // Set page during the sale: show the usual price struck through beside the sale price, and keep the
+  // sticky bar on the same figure as the page (the old bar had the full price written into it).
+  function setSale() {
+    if (!onSale || !/\/rebinds\/p\/acotar-book-set$/.test(location.pathname.replace(/\/$/, ""))) return;
+    var WAS = { "350": "500", "420": "600", "490": "700", "560": "800" };
+    var main = d.querySelector('[data-gfb-field="pdp-price"]');
+    var bar = d.querySelector('[data-gfb-field="bar-price"]');
+    if (!main) return;
+    var busy = false;
+    var paint = function () {
+      if (busy) return;
+      var m = /\$\s*([0-9,]+)(?:\.\d\d)?/.exec(main.textContent || "");
+      if (!m) return;
+      var now = m[1].replace(/,/g, ""), was = WAS[now];
+      if (!was) return;
+      busy = true;
+      var html = "$" + now + '.00 <span class="gfb-was"><span class="gfb-vh">Was </span>$' + was + ".00</span>";
+      if (!main.querySelector(".gfb-was")) main.innerHTML = html;
+      if (bar) {
+        var small = bar.querySelector("small"), label = small ? small.outerHTML : "";
+        if (bar.getAttribute("data-g2-now") !== now) { bar.innerHTML = html + label; bar.setAttribute("data-g2-now", now); }
+      }
+      busy = false;
+    };
+    paint();
+    if (window.MutationObserver) {
+      new MutationObserver(paint).observe(main, { childList: true, characterData: true, subtree: true });
+      if (bar) new MutationObserver(paint).observe(bar, { childList: true, characterData: true, subtree: true });
+    }
+    setTimeout(paint, 1500); setTimeout(paint, 4000);
+  }
+
   function behaviours() {
 // Gold Foil Books v2. Small, dependency-free behaviours.
 (function () {
@@ -369,6 +401,7 @@
     try { if (built) behaviours(); } catch (e) {}
     try { product(); } catch (e) {}
     try { pack(); } catch (e) {}
+    try { setSale(); } catch (e) {}
     try { artworkListing(); } catch (e) {}
   });
 })();
