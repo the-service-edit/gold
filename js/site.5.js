@@ -14,6 +14,8 @@
       var price = prices[key];
       if (price == null) return;
       document.querySelectorAll("[data-price]").forEach(function (el) { el.textContent = money(price); });
+      var was = form.getAttribute("data-was");
+      if (was) { was = JSON.parse(was)[key]; document.querySelectorAll("[data-was]:not([data-buy])").forEach(function (el) { el.textContent = money(was); }); }
       document.querySelectorAll("[data-afterpay]").forEach(function (el) { el.textContent = "A" + money(price / 4); });
       document.querySelectorAll("[data-when]").forEach(function (el) {
         el.hidden = key.indexOf(el.getAttribute("data-when")) !== 0;
@@ -42,7 +44,7 @@
 
   // The sticky bar steps aside while the in-page Add to cart button is on screen.
   var bar = document.querySelector(".bar");
-  var inPage = document.querySelector(".buy .btn, .hero .btn");
+  var inPage = document.querySelector(".buy .btn, .hero .btn, .bf-cta .btn");
   if (bar && inPage && "IntersectionObserver" in window) {
     new IntersectionObserver(function (entries) {
       bar.hidden = entries[0].isIntersecting;
@@ -159,6 +161,18 @@
     window.addEventListener("resize", start);
     window.addEventListener("load", start);
     if (cap.hint) cap.hint.textContent = "Swipe to see all five books.";
+  });
+
+  // Sale countdown to a real end time. Says nothing once the sale is over.
+  document.querySelectorAll("[data-countdown]").forEach(function (el) {
+    var end = new Date(el.getAttribute("data-countdown")).getTime();
+    var tick = function () {
+      var ms = end - Date.now();
+      if (ms <= 0) { el.textContent = "now ended"; return; }
+      var d = Math.floor(ms / 864e5), h = Math.floor(ms % 864e5 / 36e5), m = Math.floor(ms % 36e5 / 6e4);
+      el.textContent = d > 0 ? d + (d === 1 ? " day " : " days ") + h + (h === 1 ? " hr left" : " hrs left") : h > 0 ? h + (h === 1 ? " hr " : " hrs ") + m + " min left" : m + " min left";
+    };
+    tick(); setInterval(tick, 30000);
   });
 
   // Sign-up is not wired on the preview build. Say so instead of pretending.
